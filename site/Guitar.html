@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Guitar</title>
+    <link rel="stylesheet" href="Guitar.css" />
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+        }
+        #background {
+            width: 50%;
+            height: 700px;
+            background-color: lightblue;
+            margin-left: 25%;
+        }
+        .nav ul {
+            display: flex;
+            list-style-type: none;
+            font-size: 15px;
+            padding: 0px;
+            margin-left: 20%;
+        }
+        .nav li {
+            padding: 5px 30px 5px 30px;
+            background-color: ghostwhite;
+            margin-top: 20px;
+        }
+        .imgbtn {
+            margin-bottom: 30px;
+        }
+        .imgbtn button{
+             margin-top: 10px;
+        }
+        #proimg {
+            width: 300px;
+            height: 200px;
+        }
+        .nxt {
+            margin-left: 85px;
+        }
+        .imgbtn button:hover {
+            cursor: pointer;
+            background-color: lightgrey;
+        }
+        .info{
+            margin-top:30px;
+        }
+        .info div {
+            font-size: 15px;
+            color: black;
+            background-color: whitesmoke;
+            text-align: center;
+            margin-bottom: 5px;
+            margin-left:10px;
+            margin-right:10px;
+        }
+        .info button {
+            margin-bottom: 5px;
+        }
+        .info button:hover {
+            cursor: pointer;
+            background-color: lightgray;
+        }
+        #buyclick {
+            padding: 2px 10px;
+            float: right;
+            margin-right: 30px;
+            font-size: 15px;
+        }
+        #buyclick:hover {
+            background-color: lightgray;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onload="loadData()"> 
+    <div id="background">
+        <div class="nav">
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Service</li>
+                <li>Contact</li>
+            </ul>
+        </div>
+        <div class="imgbtn">
+            <img id="proimg" src="guitarImages/firstGuitar.jpg" /><br />
+            <button onclick="previous()" class="pre">Previous</button>
+            <button onclick="next()" class="nxt">Next</button>
+        </div>
+        <div class="info">
+            <button onclick="product()">+ Product Info</button><br />
+            <div id="proinfo"></div>
+            <button onclick="shipping()">+ Shipping Info</button><br />
+            <div id="shipinfo"></div>
+            <button onclick="review()">+ Cust. Review</button>
+            <div id="custrev"></div>
+        </div>
+        <div class="buy"><button onclick="buy()" id="buyclick">Buy</button></div>
+    </div>
+
+
+    <script>
+        var data;
+        function loadData() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open('GET', 'guitardata.json', true);
+            
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    data = JSON.parse(xhttp.responseText);
+
+                }
+            }
+        }
+        var i = 0;
+        function previous() {
+            if (i > 0) {
+                i--;
+            }
+            loadData();
+            document.getElementById('proimg').src = data.allProducts[i].image_path;
+            document.getElementById('proinfo').innerHTML = data.allProducts[i].product_description;
+            document.getElementById('shipinfo').innerHTML = data.allProducts[i].shipping_details;
+            document.getElementById('custrev').innerHTML = data.allProducts[i].customer_reviews;
+        }
+        function next() {
+            if (i < data.allProducts.length - 1) {
+                i++;
+            }
+            document.getElementById('proimg').src = data.allProducts[i].image_path;
+            document.getElementById('proinfo').innerHTML = data.allProducts[i].product_description;
+            document.getElementById('shipinfo').innerHTML = data.allProducts[i].shipping_details;
+            document.getElementById('custrev').innerHTML = data.allProducts[i].customer_reviews;
+        }
+
+        function product() {
+            var info = document.getElementById('proinfo');
+            if (info.style.display === "block") {
+                info.style.display = "none";
+            }
+            else {
+                info.style.display = "block";
+            }
+            info.innerHTML = data.allProducts[i].product_description;
+        }
+        function shipping() {
+            var ship = document.getElementById('shipinfo');
+            if (ship.style.display === "block") {
+                ship.style.display = "none";
+            }
+            else {
+                ship.style.display = "block";
+            }
+            ship.innerHTML = data.allProducts[i].shipping_details;
+        }
+        function review() {
+            var cust = document.getElementById('custrev');
+            if (cust.style.display === "block") {
+                cust.style.display = "none";
+            }
+            else {
+                cust.style.display = "block";
+            }
+            cust.innerHTML = data.allProducts[i].customer_reviews;
+        }
+        function buy() {
+            window.location.href = 'Guitar2.html?index=' + i;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+﻿    <!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Finalpage</title>
+    <link rel="stylesheet" href="Guitar.css" />
+    <style>
+        #pr{
+            font-size:10px;
+        }
+        .person{
+            margin-top:10px;
+            margin-right:300px;
+        }
+        .person p{
+            font-size:15px;
+            margin:5px;
+            margin-left:30px;
+            text-decoration:underline;
+        }
+        #home{
+            margin-right:30px;
+            margin-top:15px;
+        }
+    </style>
+</head>
+<body onload="loadData()">
+    <div id="background">
+        <div class="nav">
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Service</li>
+                <li>Contact</li>
+            </ul>
+            <div class="g1">
+                <img id="gi">
+                <div id="pr"></div>
+            </div>
+            <div class="person">
+                <p>First name:<span id="b1"></span></p>
+                <p>Last name:<span id="b2"></span></p>
+                <p>Contact:<span id="b3"></span></p>
+                <p>Email:<span id="b4"></span></p>
+                <p>Card Number:<span id="b5"></span></p>
+                <p>Name on card:<span id="b6"></span></p>
+                <p>Expiration date:<span id="b7"></span></p>
+                <p>Security code:<span id="b8"></span></p>
+            </div>  
+            <div id="home">
+                <button onclick="home()">Go to home</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        var url = window.location.href;
+        var str = url.split('=');
+        var index = str[1];
+
+        var data;
+        function loadData() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open('GET', 'guitardata.json', true);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    data = JSON.parse(xhttp.responseText);
+                    document.getElementById('gi').src = data.allProducts[index].image_path;
+                    document.getElementById('pr').innerHTML = data.allProducts[index].product_description;
+                }
+            }
+        }
+        document.getElementById('b1').innerHTML = localStorage.getItem('f');
+        document.getElementById('b2').innerHTML = localStorage.getItem('l');
+        document.getElementById('b3').innerHTML = localStorage.getItem('ct');
+        document.getElementById('b4').innerHTML = localStorage.getItem('e');
+        document.getElementById('b5').innerHTML = localStorage.getItem('cr');
+        document.getElementById('b6').innerHTML = localStorage.getItem('n');
+        document.getElementById('b7').innerHTML = localStorage.getItem('d');
+        document.getElementById('b8').innerHTML = localStorage.getItem('s');
+
+        function home() {
+            window.location.href = 'Guitar.html';
+        }
+    </script>
+
+
+</body>
+</html>

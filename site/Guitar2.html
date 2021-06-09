@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Purchase form</title>
+    <link rel="stylesheet" href="Guitar.css" />
+    <style>
+        #g1 {
+            display: flex;
+        }
+        #gimg {
+            width: 350px;
+            height: 250px;
+            margin-left: 10px;
+            padding:10px;
+        }
+        .pd{
+            margin-top:20px;
+        }
+        #pro {
+            font-size: 13px;
+            float: right;
+            padding-right:10px;
+        }
+        #infoform {
+            display: flex;
+            font-size: 12px;
+            margin-left:120px;
+            margin-top:10px;
+        }
+        #right {
+            margin-left: 10px;
+        }
+        #infoform #right p input {
+            float: right;
+        }
+        #left {
+            margin-left: 10px;
+        }
+        #infoform #left p input {
+            float: right;
+        }
+        #review {
+            float: right;
+            margin-right: 50px;
+            margin-top: 20px;
+        }
+        #getinfo {
+            font-size: 12px;
+            margin-top: 60px;
+            margin-right: 300px;
+        }
+        #getinfo p {
+             margin: 0px;
+             padding: 0px;
+             text-decoration:underline;
+             font-size:15px;
+        }
+        #but{
+            margin-top:10px;
+        }
+        .et:hover {
+            cursor: pointer;
+        }
+        .bu:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onload="loadData()">
+    <div id="background">
+        <div class="nav">
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Service</li>
+                <li>Contact</li>
+            </ul>
+            <div id="g1">
+                <img id="gimg" />
+                <div class="pd"><u>Product description:</u><p id="pro"></p></div>
+                
+            </div>
+            <div id="infoform">
+                <div id="right">
+                    <p>FirstName<input type="text" placeholder="firstname" onkeyup="fname()" id="fn" required /></p>
+                    <p>LastName<input type="text" placeholder="lastname" onkeyup="lname()" id="ln" required /></p>
+                    <p>Contact<input type="text" placeholder="123-345-5678" onkeyup="contact()" id="co" required /></p>
+                    <p>Email<input type="email" placeholder="abc@mail.com" onkeyup="email()" id="em" required /></p>
+                </div>
+                <div id="left">
+                    <p>CardNumber<input type="number" placeholder="0000 0000 0000 0000" onkeyup="card()" id="cd" required /></p>
+                    <p>NameonCard<input type="text" placeholder="name" onkeyup="cardname()" id="cn" required /></p>
+                    <p>Expiration Date<input type="text" placeholder="00-0000" onkeyup="date()" id="dt" required /></p>
+                    <p>SecurityCode<input type="password" placeholder="" onkeyup="code()" id="sc" required /></p>
+                </div>
+            </div>
+            <div id="review">
+                <button onclick="review()" id="re">Go to review</button>
+            </div>
+            <div id="getinfo">
+                <p>First name:<span id="fname"></span></p>
+                <p>Last name:<span id="lname"></span></p>
+                <p>Contact:<span id="contact"></span></p>
+                <p>Email:<span id="email"></span></p>
+                <p>Card Number:<span id="card"></span></p>
+                <p>Name on card:<span id="cardname"></span></p>
+                <p>Expiration Date:<span id="date"></span></p>
+                <p>Security Code:<span id="code"></span></p>
+            </div>
+            <div id="but">
+                <button onclick="edit()" id="et">Edit</button>
+                <button onclick="buy()" class="bu">Buy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var url = window.location.href;
+        var str = url.split('=');
+        var index = str[1];
+
+        var data;
+        function loadData() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open('GET', 'guitardata.json', true);
+            xhttp.send();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    data = JSON.parse(xhttp.responseText);
+                    document.getElementById('gimg').src = data.allProducts[index].image_path;
+                    document.getElementById('pro').innerHTML = data.allProducts[index].product_description;
+                }
+            }
+        }
+
+        function fname() {
+            var fn = document.getElementById('fn');
+            if (fn.value.match(/^[A-Za-z]+$/)) {
+                document.getElementById('fname').innerHTML = fn.value;
+                localStorage.setItem('f', fn.value);
+            }
+            else {
+                alert('Enter alphabet character only');
+            }
+        }
+        function lname() {
+            var ln = document.getElementById('ln');
+            if (ln.value.match(/^[A-Za-z]+$/)) {
+                document.getElementById('lname').innerHTML = ln.value;
+                localStorage.setItem('l', ln.value);
+            }
+            else {
+                alert('Enter alphabet character only');
+            }
+        }
+        function contact() {
+            var contact = document.getElementById('co');
+            if (contact.value.match(/^([0-9]{3})-([0-9]{3})-([0-9]{4})$/)) {
+                document.getElementById('contact').innerHTML = contact.value;
+                localStorage.setItem('ct', contact.value);
+                contact.style.borderColor = 'black';
+                contact.style.borderWidth = '1px';
+
+            }
+            else {
+                contact.style.borderColor = 'red';
+            }
+        }
+        function email() {
+            var email = document.getElementById('em');
+            if (email.value.match(/^\w+([.-]?\w+)*@[a-z]+.[a-z]{2,3}$/)) {
+                document.getElementById('email').innerHTML = email.value;
+                localStorage.setItem('e', email.value);
+            }
+            else {
+                alert('Enter a valid email address');
+            }
+        }
+        function card() {
+            var card = document.getElementById('cd');
+            if (card.value.match(/^[0-9]{4}[0-9]{4}[0-9]{4}[0-9]{4}$/)) {
+                document.getElementById('card').innerHTML = card.value;
+                localStorage.setItem('cr', card.value);
+                card.style.borderColor = 'black';
+                card.style.borderWidth = '1px';
+
+            }
+            else {
+                card.style.borderColor = 'red';
+            }
+        }
+        function cardname() {
+            var cardname = document.getElementById('cn');
+            if (cardname.value.match(/^[A-Za-z]+$/)) {
+                document.getElementById('cardname').innerHTML = cardname.value;
+                localStorage.setItem('n', cardname.value);
+            }
+            else {
+                alert('Enter a valid name');
+            }
+        }
+        function date() {
+            var date = document.getElementById('dt');
+            if (date.value.match(/^[1-12]{1,2}-[2020-2030]{4}$/)) {
+                document.getElementById('date').innerHTML = date.value;
+                localStorage.setItem('d', date.value);
+                date.style.borderColor = 'black';
+                date.style.borderWidth = '1px';
+            }
+            else {
+                date.style.borderColor = 'red';
+            }
+        }
+        function code() {
+            var code = document.getElementById('sc');
+            if (code.value.match(/^[0-9]{3,4}$/)) {
+                document.getElementById('code').innerHTML = code.value;
+                localStorage.setItem('s', code.value);
+                code.style.borderColor = 'black';
+                code.style.borderWidth = '1px';
+            }
+            else {
+                code.style.borderColor = 'red';
+            }
+        }
+        var info = document.getElementById('infoform');
+        var get = document.getElementById('getinfo');
+        var re = document.getElementById('re');   
+        var c = new Array(document.getElementById('fn'), document.getElementById('ln'), document.getElementById('co'), document.getElementById('em'), document.getElementById('cd'), document.getElementById('cn'), document.getElementById('dt'), document.getElementById('sc'));
+        
+        function review() {
+            allentered = 0;
+            for (var i = 0; i < c.length; i++) {
+                if (c[i].value === '' || c[i].value === null) {
+                    alert('enter a value');
+                }
+                else {
+                    allentered = allentered + 1;
+                }
+            }
+            alert(allentered);
+            if (allentered == 8) {
+                info.style.display = 'none';
+                get.style.fontSize = '20px';
+                re.style.display = 'none';
+
+            }
+        }
+        function buy() {
+            if (allentered == 8) {
+                window.location.href = 'Guitar3.html?index=' + index;
+
+            }
+            else {
+                alert('enter value');
+            }
+        }
+
+    </script>
+
+</body>
+</html>
